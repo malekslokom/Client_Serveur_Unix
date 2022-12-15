@@ -108,6 +108,9 @@ int main()
             fprintf(fPtr,"\n");
 
             // Construction de la réponse
+            response.pid_server=getpid();
+            fprintf(fPtr, "%d", response.pid_server);
+            fprintf(fPtr,"\n");
             for (int i=0;i<question.question;i++){
                 response.response[i]= rand()%100;
 
@@ -115,7 +118,7 @@ int main()
                 fprintf(fPtr, "%d", response.response[i]);
                 fprintf(fPtr,"\n");
             }
-            response.pid_server=getpid();
+            
 
             // Envoi de la réponse 
             int sendStatus = send(socketServiceClient, (const void *)&response, sizeof(struct response), 0);
