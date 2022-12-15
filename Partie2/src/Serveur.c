@@ -86,7 +86,7 @@ int main()
             char pid_client_str[10];
             sprintf(pid_client_str, "%d", question.pid_client);
             char resultPath[100]="";
-            strcat(resultPath,"results/");
+            strcat(resultPath,"Partie2/results/");
             strcat(resultPath,pid_client_str);
             strcat(resultPath,".txt");
 
@@ -101,7 +101,7 @@ int main()
             // fopen() retourne NULL si la dernière opération a échoué.
             if(fPtr == NULL)
             {
-                perror("[SERVEUR] Erreur lors de création du fichier 'result' !");
+                perror("[SERVEUR] Erreur lors de création du fichier 'results' !");
                 exit(1);
             }
             //Sauvegarder les données dans le fichier
