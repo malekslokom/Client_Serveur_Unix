@@ -1,4 +1,5 @@
 #include "serv_cli_socket.h"
+#include<string.h>
 
 int main()
 {
@@ -6,6 +7,7 @@ int main()
 	socklen_t addr_size;
     struct question question ;
     struct response response ;
+
 
     //Créer la socket du serveur "socketServeur"
     //AF_INET est une famille d'adresses qui est utilisée pour désigner le type d'adresses avec lesquelles notre socket peut communiquer.
@@ -68,15 +70,50 @@ int main()
                 perror("[SERVER] Erreur lors de la reception des donnée !");
                 exit(1);
             }	
+
             //Affichage
             printf("¤¤¤¤¤¤¤¤¤ Message Recue ¤¤¤¤¤¤¤¤¤\n");
             printf("         PID= %d \n",question.pid_client );
             printf("         Nombre= %d \n",question.question);
             printf("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤\n");
 
+           
+
+            // Ouvrir le fichier "result"
+            char pid_client_str[10];
+            sprintf(pid_client_str, "%d", question.pid_client);
+            char resultPath[100]="";
+            strcat(resultPath,"results/");
+            strcat(resultPath,pid_client_str);
+            strcat(resultPath,".txt");
+
+            //Pointeur de fichier pour contenir la référence à notre fichier
+            FILE * fPtr;
+            //Supprimer le fichier si deja existe
+            remove(resultPath);
+            //Creer et ouvrir le fichier
+            fPtr = fopen(resultPath, "w");
+             
+            
+            // fopen() retourne NULL si la dernière opération a échoué.
+            if(fPtr == NULL)
+            {
+                perror("[SERVER] Erreur lors de création du fichier 'result' !");
+                exit(1);
+            }
+            //Sauvegarder les données dans le fichier
+            fprintf(fPtr, "%d", question.pid_client);
+            fprintf(fPtr,"\n");
+            fprintf(fPtr, "%d", question.question);
+            fprintf(fPtr,"\n");
+
             // Construction de la réponse
             for (int i=0;i<question.question;i++){
                 response.response[i]= rand()%100;
+
+                //Sauvegarder les données dans le fichier
+                fprintf(fPtr, "%d", response.response[i]);
+                fprintf(fPtr,"\n");
             }
             response.pid_server=getpid();
 
@@ -89,6 +126,10 @@ int main()
             printf("[SERVER] Reponse envoyé.\n");
             printf("Déconnecté de %s:%d\n", inet_ntoa(newAddr.sin_addr), ntohs(newAddr.sin_port));
             printf("\n");
+
+            //Fermer le fichier pour sauvegarder les données du fichier
+            fclose(fPtr);
+
             exit(0);
         } else {
             // processus pére
