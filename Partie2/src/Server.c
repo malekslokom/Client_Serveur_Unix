@@ -32,7 +32,7 @@ int main()
 		perror("[SERVER] Erreur de la liaison (binding) !");
 		exit(1);
 	}
-    printf("[SERVER] Lié au port %d\n", PORT);
+    printf("[SERVER] Le Serveur est lié au port %d\n", PORT);
 
     //Écouter les connexions avec l'appel système listen().
     int listenStatus =listen(socketServeur, BACKLOG);
@@ -40,7 +40,7 @@ int main()
 		perror("[SERVER] Erreur lors de démarrage de l'écoute du socket !");
 		exit(1);
 	}
-    printf("[SERVER] a l'écoute...\n");
+    printf("[SERVER] Le serveur est a l'écoute...\n");
 
     while (1)
     {
@@ -53,7 +53,7 @@ int main()
         printf("Connexion acceptée de %s:%d\n", inet_ntoa(newAddr.sin_addr), ntohs(newAddr.sin_port));
 
         //Créer un processus enfant pour traiter la communication avec un seul client.
-        pid = fork();
+        int pid = fork();
         if (pid < 0) {
             perror("[SERVER] Erreur lors de fork");
             exit(1);
@@ -73,7 +73,6 @@ int main()
             printf("         PID= %d \n",question.pid_client );
             printf("         Nombre= %d \n",question.question);
             printf("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤\n");
-            printf("\n");
 
             // Construction de la réponse
             for (int i=0;i<question.question;i++){
@@ -82,13 +81,14 @@ int main()
             response.pid_server=getpid();
 
             // Envoi de la réponse 
-            int sendStatus = send(socketServiceClient, response, sizeof(struct response), 0);
+            int sendStatus = send(socketServiceClient, (const void *)&response, sizeof(struct response), 0);
             if (sendStatus< 0 ){
                 perror("[SERVER] Erreur lors de l'envoi du réponse !");
                 exit(1);
             }
             printf("[SERVER] Reponse envoyé.\n");
             printf("Déconnecté de %s:%d\n", inet_ntoa(newAddr.sin_addr), ntohs(newAddr.sin_port));
+            printf("\n");
             exit(0);
         } else {
             // processus pére

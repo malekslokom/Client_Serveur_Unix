@@ -31,7 +31,7 @@ int main(){
 		perror("[CLIENT] Erreur lors de la connexion au socket !\n");
 		exit(1);
 	}
-    printf("[CLIENT] Connecté au serveur.\n");
+    printf("[CLIENT] Client connecté au serveur.\n");
 
     /* Construction et envoi d'une question */ 
     //Initialisation
@@ -48,7 +48,7 @@ int main(){
     printf("\n");
 
     //Envoi du question
-    int sendStatus = send(clientSocket, question, sizeof(struct question), 0);
+    int sendStatus = send(clientSocket, (const void *)&question, sizeof(struct question), 0);
 	if (sendStatus <0 ){
 		perror("[CLIENT] Erreur lors de l'envoi du question !");
 		exit(1);
@@ -62,6 +62,7 @@ int main(){
 		exit(1);
 	}
     printf("[CLIENT] Reponse recu.\n");
+    printf("\n");
 
     // Affichage
     printf("¤¤¤¤¤¤¤¤¤ Response ¤¤¤¤¤¤¤¤¤\n");
@@ -70,7 +71,7 @@ int main(){
     printf("  ");
     for (int i=0;i<question.question;i++)
         printf ("|%d ",response.response[i]);
-    printf("|\n ");
+    printf("|\n");
     printf("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤\n");
 
     //Fermer socket
