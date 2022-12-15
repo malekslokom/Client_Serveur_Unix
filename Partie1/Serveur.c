@@ -2,12 +2,12 @@
 #include "Handlers_Serv.h" 
 
 void hand_reveil(int sig){
-    printf("-- La réponse est bien recu au client\n");
+    printf("[SERVEUR] La réponse est bien recu au client\n");
 }
 
 void fin_serveur(int sig){
     printf("%d",sig);
-    printf("-- Fin serveur ( par le signal %d)\n",sig);
+    printf("[SERVEUR] Fin serveur ( par le signal %d)\n",sig);
     unlink (QuestionTube);
     unlink (ResponseTube);
     exit(0);
@@ -18,17 +18,17 @@ int main(){
     int questionT;
     int responseT;
     struct question question ;
-    struct response response ;
+    struct reponse reponse ;
     mode_t mode = S_IRUSR | S_IRGRP | S_IROTH | S_IWUSR | S_IWGRP | S_IWOTH;
     /* Création des tubes nommés */
     if ( mkfifo (QuestionTube,mode) == -1)
     {
-        perror (" La Création du tube 1 est impossible \n");
+        perror("[SERVEUR] La Création du tube 1 est impossible \n");
         exit (1);
     };
     if ( mkfifo (ResponseTube,mode)== -1)
     {
-        perror (" La Création du tube 2 est impossible \n");
+        perror("[SERVEUR] La Création du tube 2 est impossible \n");
         exit (2);
     };
     /*initialisation du générateur de nombres aléatoires*/ 
@@ -52,7 +52,7 @@ int main(){
     printf("\n");
     printf("¤ Coté Serveur (pid= %d) \n",getpid());
     while(1){
-        printf("-- Serveur en attente \n");
+        printf("[SERVEUR] Serveur en attente \n");
         /* lecture d'une question */ 
         if(read(questionT,&question,sizeof(struct question))<=0){
             close ( questionT );
@@ -68,12 +68,12 @@ int main(){
 
         /* construction de la réponse */ 
         for (int i=0;i<question.question;i++){
-            response.response[i]= rand()%100;
+            reponse.reponse[i]= rand()%100;
         }
-        response.pid_server=getpid();
+        reponse.pid_server=getpid();
 
         /* envoi de la réponse */ 
-        if(write(responseT,&response,sizeof(struct response ))<0){
+        if(write(responseT,&reponse,sizeof(struct reponse ))<0){
             perror("-- Probléme d'écriture \n");
             exit(4);
         }

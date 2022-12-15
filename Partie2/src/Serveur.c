@@ -6,7 +6,7 @@ int main()
     struct sockaddr_in newAddr;
 	socklen_t addr_size;
     struct question question ;
-    struct response response ;
+    struct reponse reponse ;
 
 
     //Créer la socket du serveur "socketServeur"
@@ -15,10 +15,10 @@ int main()
     //Le protocole par défaut 0
     int  socketServeur = socket(AF_INET, SOCK_STREAM, 0);
     if (socketServeur < 0 ){
-		perror("[SERVER] Erreur lors de ouverture de la socket !");
+		perror("[SERVEUR] Erreur lors de ouverture de la socket !");
 		exit(1);
 	}
-    printf("[SERVER] Le socket de serveur est créé.\n");
+    printf("[SERVEUR] Le socket de serveur est créé.\n");
 
     //Définir l'adresse du serveur
     //La fonction htons convertit un u_short de l'hôte à l'ordre des octets du réseau TCP/IP (qui est big-endian).
@@ -31,25 +31,25 @@ int main()
     //Appel de la fonction bind à l'IP et au port spécifiés.
     int bindStatus = bind(socketServeur, (struct sockaddr*)&serveurAdresse, sizeof(serveurAdresse));    
     if (bindStatus <0){
-		perror("[SERVER] Erreur de la liaison (binding) !");
+		perror("[SERVEUR] Erreur de la liaison (binding) !");
 		exit(1);
 	}
-    printf("[SERVER] Le Serveur est lié au port %d\n", PORT);
+    printf("[SERVEUR] Le Serveur est lié au port %d\n", PORT);
 
     //Écouter les connexions avec l'appel système listen().
     int listenStatus =listen(socketServeur, BACKLOG);
     if (listenStatus <0){
-		perror("[SERVER] Erreur lors de démarrage de l'écoute du socket !");
+		perror("[SERVEUR] Erreur lors de démarrage de l'écoute du socket !");
 		exit(1);
 	}
-    printf("[SERVER] Le serveur est a l'écoute...\n");
+    printf("[SERVEUR] Le serveur est a l'écoute...\n");
 
     while (1)
     {
         //Début de l'acceptation.
         int socketServiceClient = accept(socketServeur, (struct sockaddr*)&newAddr, &addr_size);
         if (socketServiceClient < 0) {
-            perror("[SERVER] Erreur lors de l'établissement des connections !");
+            perror("[SERVEUR] Erreur lors de l'établissement des connections !");
             exit(1);
         }
         printf("Connexion acceptée de %s:%d\n", inet_ntoa(newAddr.sin_addr), ntohs(newAddr.sin_port));
@@ -57,7 +57,7 @@ int main()
         //Créer un processus enfant pour traiter la communication avec un seul client.
         int pid = fork();
         if (pid < 0) {
-            perror("[SERVER] Erreur lors de fork");
+            perror("[SERVEUR] Erreur lors de fork");
             exit(1);
         }
         
@@ -67,11 +67,14 @@ int main()
             //recieve the data from the server
             int recvStatus= recv(socketServiceClient, &question, sizeof(struct question), 0) ;
             if (recvStatus <0 ){
-                perror("[SERVER] Erreur lors de la reception des donnée !");
+                perror("[SERVEUR] Erreur lors de la reception des donnée !");
                 exit(1);
             }	
 
             //Affichage
+            printf("¤¤¤¤¤¤¤¤¤¤¤¤  Client-Serveur  ¤¤¤¤¤¤¤¤¤¤¤¤\n");
+            printf("\n");
+            printf("¤ Coté Serveur (pid= %d) \n",getpid());
             printf("¤¤¤¤¤¤¤¤¤ Message Recue ¤¤¤¤¤¤¤¤¤\n");
             printf("         PID= %d \n",question.pid_client );
             printf("         Nombre= %d \n",question.question);
@@ -98,7 +101,7 @@ int main()
             // fopen() retourne NULL si la dernière opération a échoué.
             if(fPtr == NULL)
             {
-                perror("[SERVER] Erreur lors de création du fichier 'result' !");
+                perror("[SERVEUR] Erreur lors de création du fichier 'result' !");
                 exit(1);
             }
             //Sauvegarder les données dans le fichier
@@ -108,25 +111,25 @@ int main()
             fprintf(fPtr,"\n");
 
             // Construction de la réponse
-            response.pid_server=getpid();
-            fprintf(fPtr, "%d", response.pid_server);
+            reponse.pid_server=getpid();
+            fprintf(fPtr, "%d", reponse.pid_server);
             fprintf(fPtr,"\n");
             for (int i=0;i<question.question;i++){
-                response.response[i]= rand()%100;
+                reponse.reponse[i]= rand()%100;
 
                 //Sauvegarder les données dans le fichier
-                fprintf(fPtr, "%d", response.response[i]);
+                fprintf(fPtr, "%d", reponse.reponse[i]);
                 fprintf(fPtr,"\n");
             }
             
 
             // Envoi de la réponse 
-            int sendStatus = send(socketServiceClient, (const void *)&response, sizeof(struct response), 0);
+            int sendStatus = send(socketServiceClient, (const void *)&reponse, sizeof(struct reponse), 0);
             if (sendStatus< 0 ){
-                perror("[SERVER] Erreur lors de l'envoi du réponse !");
+                perror("[SERVEUR] Erreur lors de l'envoi du réponse !");
                 exit(1);
             }
-            printf("[SERVER] Reponse envoyé.\n");
+            printf("[SERVEUR] Reponse envoyé.\n");
             printf("Déconnecté de %s:%d\n", inet_ntoa(newAddr.sin_addr), ntohs(newAddr.sin_port));
             printf("\n");
 

@@ -4,7 +4,7 @@
 int main(){
     // Déclaration des structures
     struct question question ;
-    struct response response ;
+    struct reponse reponse ;
 
     //Créer la socket du client "clientSocket"
     //AF_INET est une famille d'adresses qui est utilisée pour désigner le type d'adresses avec lesquelles notre socket peut communiquer.
@@ -41,6 +41,9 @@ int main(){
     question.question = 1+rand()% NMAX;
 
     // Affichage
+    printf("¤¤¤¤¤¤¤¤¤¤¤¤  Client-Serveur  ¤¤¤¤¤¤¤¤¤¤¤¤\n");
+    printf("\n");
+    printf("¤ Coté Client (pid= %d) \n",getpid());
     printf("¤¤¤¤¤¤¤¤¤ Message ¤¤¤¤¤¤¤¤¤\n");
     printf("         PID= %d         \n",question.pid_client );
     printf("         Nombre= %d        \n",question.question);
@@ -56,7 +59,7 @@ int main(){
     printf("[CLIENT] Question envoyé.\n");
 
     //recieve the data from the server
-	int recvStatus = recv(clientSocket, &response, sizeof(struct response), 0);
+	int recvStatus = recv(clientSocket, &reponse, sizeof(struct reponse), 0);
 	if (recvStatus < 0 ){
 		perror("[CLIENT] Erreur lors de reception du reponse !");
 		exit(1);
@@ -66,11 +69,11 @@ int main(){
 
     // Affichage
     printf("¤¤¤¤¤¤¤¤¤ Response ¤¤¤¤¤¤¤¤¤\n");
-    printf("  PID= %d\n",response.pid_server);
+    printf("  PID= %d\n",reponse.pid_server);
     printf("  Tableau de %d entiers :\n",question.question);
     printf("  ");
     for (int i=0;i<question.question;i++)
-        printf ("|%d ",response.response[i]);
+        printf ("|%d ",reponse.reponse[i]);
     printf("|\n");
     printf("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤\n");
 

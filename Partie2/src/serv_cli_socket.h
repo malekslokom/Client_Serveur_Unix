@@ -34,9 +34,9 @@ struct question {
     int question ;
 };
 
-struct response {
+struct reponse {
     int pid_server;
-    int response[NMAX];
+    int reponse[NMAX];
 };
 
 
