@@ -15,9 +15,8 @@ $(SERV_TARGET):
 	$(CC) $(CFLAGS) -o ./obj/$(SERV_TARGET) ./src/$(SERV_TARGET).c 
 
 clean:
-	rm -f Client Serveur
 	rm -f ./obj/*
-	rm -f fifo*.txt
+	
 
 
 	

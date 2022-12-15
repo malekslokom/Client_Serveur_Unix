@@ -66,15 +66,50 @@ int main(){
         printf("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤\n");
         printf("\n");
 
-        /* construction de la réponse */ 
-        for (int i=0;i<question.question;i++){
-            reponse.reponse[i]= rand()%100;
-        }
-        reponse.pid_server=getpid();
+        // Ouvrir le fichier "result"
+            char pid_client_str[10];
+            sprintf(pid_client_str, "%d", question.pid_client);
+            char resultPath[100]="";
+            strcat(resultPath,"results/");
+            strcat(resultPath,pid_client_str);
+            strcat(resultPath,".txt");
+            printf("%s",resultPath);
+            //Pointeur de fichier pour contenir la référence à notre fichier
+            FILE * fPtr;
+            //Supprimer le fichier si deja existe
+            remove(resultPath);
+            //Creer et ouvrir le fichier
+            fPtr = fopen(resultPath, "w");
+             
+            
+            // fopen() retourne NULL si la dernière opération a échoué.
+            if(fPtr == NULL)
+            {
+                perror("[SERVEUR] Erreur lors de création du fichier 'result' !");
+                exit(1);
+            }
+            //Sauvegarder les données dans le fichier
+            fprintf(fPtr, "%d", question.pid_client);
+            fprintf(fPtr,"\n");
+            fprintf(fPtr, "%d", question.question);
+            fprintf(fPtr,"\n");
+
+            // Construction de la réponse
+            reponse.pid_server=getpid();
+            fprintf(fPtr, "%d", reponse.pid_server);
+            fprintf(fPtr,"\n");
+            for (int i=0;i<question.question;i++){
+                reponse.reponse[i]= rand()%100;
+
+                //Sauvegarder les données dans le fichier
+                fprintf(fPtr, "%d", reponse.reponse[i]);
+                fprintf(fPtr,"\n");
+            }
+            fclose(fPtr);
 
         /* envoi de la réponse */ 
         if(write(responseT,&reponse,sizeof(struct reponse ))<0){
-            perror("-- Probléme d'écriture \n");
+            perror("[SERVEUR] Probléme d'écriture \n");
             exit(4);
         }
         /* envoi du signal SIGUSR1 au client conceré */ 
