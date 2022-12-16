@@ -18,14 +18,16 @@ from tkinter.ttk import Style
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 from subprocess import call
-import os
+import os, signal
 import subprocess
 
 source=""
+pidServeurSocket=0
+pidServeurTube=0
 def runServeur(): 
-    
-    subprocess.Popen(["./obj/Serveur",""])
-    
+    global pidServeurSocket
+    pidServeurSocket=subprocess.Popen(["./obj/Serveur",""]).pid
+    print("aaaaaaaaaaa "+str(pidServeurSocket))
 
     # call(["./Partie2/obj/Serveur"])
    
@@ -36,16 +38,32 @@ def runClient():
     pidClient=subprocess.Popen(["./obj/Client",""]).pid
     print(pidClient)
     source="results/"+str(pidClient)+".txt"
+
+def runServeurTube():  
+    global pidServeurSocket
+    pidServeurSocket=subprocess.Popen(["./obj/Serveur",""]).pid
+
+def runClientTube(): 
+    global source
+    pidClient=subprocess.Popen(["./obj/Client",""]).pid
+    print(pidClient)
+    source="results/"+str(pidClient)+".txt"
     
 def DataEntryForm():
-    os.chdir("Partie2")
+    osPath=str(os.getcwd())
+    if ((osPath).__contains__("Partie1")):
+        os.chdir("..")
+    osPath=str(os.getcwd())
+    if not( (osPath).__contains__("Partie2")):
+        os.chdir("Partie2")
+        osPath=str(os.getcwd())
    # Toplevel object which will
     # be treated as a new window
     newWindow = Toplevel(app)
   
     # sets the title of the
     # Toplevel widget
-    newWindow.title("Tubes nommées")
+    newWindow.title("Socket")
     newWindow.update_idletasks()
     w_height = newWindow.winfo_height()
     w_width = newWindow.winfo_width()
@@ -68,12 +86,59 @@ def DataEntryForm():
     hreadServeur.start() 
     # starting thread 2 
     hreadClient.start() 
-    sleep(0.1)
+    sleep(0.2)
     print(source)
     f = open(source, "r")
     Label(newWindow,
           text =f.read()).pack()
     
+    
+def DataEntryForm1():
+
+    osPath=str(os.getcwd())
+    print(osPath)
+    if ((osPath).__contains__("Partie2")):
+        os.chdir("..")
+    osPath=str(os.getcwd())
+    print(osPath)
+    if not( (osPath).__contains__("Partie1")):
+        os.chdir("Partie1")
+        osPath=str(os.getcwd())
+    
+   # Toplevel object which will
+    # be treated as a new window
+    newWindow = Toplevel(app)
+  
+    # sets the title of the
+    # Toplevel widget
+    newWindow.title("Tubes nommées")
+    newWindow.update_idletasks()
+    w_height = newWindow.winfo_height()
+    w_width = newWindow.winfo_width()
+    s_height = newWindow.winfo_screenheight()
+    s_width = newWindow.winfo_screenwidth()
+    xpos = (s_width - w_width) // 2
+    ypos = (s_height - w_height) // 2
+    newWindow.geometry(f'+{xpos}+{ypos}')
+    # sets the geometry of toplevel
+    newWindow.geometry("500x500")
+ 
+    # A Label widget to show in toplevel
+    Label(newWindow,
+          text ="This is a new window").pack()
+
+    hreadServeurTube = threading.Thread(target=runServeurTube, args=()) 
+    hreadClientTube = threading.Thread(target=runClientTube, args=()) 
+
+    # starting thread 1 
+    hreadServeurTube.start() 
+    # starting thread 2 
+    hreadClientTube.start() 
+    sleep(0.1)
+    print(source)
+    f = open(source, "r")
+    Label(newWindow,
+          text =f.read()).pack()
 
 
 
@@ -92,7 +157,7 @@ class DataEntry(ttk.Frame):
         tube_btn = ttk.Button(
             master=container,
             text="Tube nommée",
-            command=lambda : DataEntryForm(),
+            command=lambda : DataEntryForm1(),
             bootstyle=PRIMARY,
             width=65,
         )
@@ -102,7 +167,7 @@ class DataEntry(ttk.Frame):
         socket_btn = ttk.Button(
             master=container,
             text="Socket",
-            command=self.on_submit,
+            command=lambda : DataEntryForm(),
             bootstyle=SUCCESS,
             width=65,
             
@@ -130,6 +195,8 @@ class DataEntry(ttk.Frame):
 
     def on_cancel(self):
         """Cancel and close the application."""
+        os.system("lsof -i:9000 | grep LISTEN | tr -s ' ' | cut -d' ' -f2 | xargs kill -9")
+        os.system("kill -2 "+str(pidServeurTube))
         self.quit()
     def place_window_center(self):
         """Position the toplevel in the center of the screen. Does not
@@ -148,7 +215,6 @@ class DataEntry(ttk.Frame):
 
 
 if __name__ == "__main__":
-
     app = ttk.Window("Data Entry", "superhero", size=(500, 500))
     app.place_window_center()
     DataEntry(app)

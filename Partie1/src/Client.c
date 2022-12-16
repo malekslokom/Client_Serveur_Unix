@@ -26,13 +26,13 @@ int main()
     question.question = 1+rand()% NMAX;
 
     // Affichage
-    printf("¤¤¤¤¤¤¤¤¤¤¤¤  Client-Serveur  ¤¤¤¤¤¤¤¤¤¤¤¤\n");
+    printf("¤¤¤¤¤¤¤¤¤¤¤¤  Client-Serveur Tubes nommée ¤¤¤¤¤¤¤¤¤¤¤¤\n");
     printf("\n");
     printf("¤ Coté Client (pid= %d) \n",getpid());
     printf("¤¤¤¤¤¤¤¤¤ Message ¤¤¤¤¤¤¤¤¤\n");
     printf("         PID= %d         \n",question.pid_client );
     printf("         Nombre= %d        \n",question.question);
-    printf("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤\n");
+    printf("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤\n");
     printf("\n");
 
     //Envoi du question
@@ -56,13 +56,13 @@ int main()
 
     /* Traitement local de la réponse */ 
     printf("\n");
-    printf("¤¤¤¤¤¤¤¤¤ Response ¤¤¤¤¤¤¤¤¤\n");
+    printf("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤ Response ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤\n");
     printf("  PID= %d\n",reponse.pid_server);
     printf("  Tableau de %d entiers :\n",question.question);
     printf("  ");
     for (int i=0;i<question.question;i++)
         printf ("|%d ",reponse.reponse[i]);
     printf("|\n ");
-    printf("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤\n");
+    printf("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤\n");
    return 0;
 } 

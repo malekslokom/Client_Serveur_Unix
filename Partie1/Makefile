@@ -16,7 +16,7 @@ $(SERV_TARGET):
 
 clean:
 	rm -f ./obj/*
-	
+	rm fifo*
 
 
 	

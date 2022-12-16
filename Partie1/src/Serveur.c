@@ -6,7 +6,6 @@ void hand_reveil(int sig){
 }
 
 void fin_serveur(int sig){
-    printf("%d",sig);
     printf("[SERVEUR] Fin serveur ( par le signal %d)\n",sig);
     unlink (QuestionTube);
     unlink (ResponseTube);
@@ -48,7 +47,7 @@ int main(){
     signal(SIGUSR1,hand_reveil);
    
     // Affichage
-    printf("¤¤¤¤¤¤¤¤¤¤¤¤  Client-Serveur  ¤¤¤¤¤¤¤¤¤¤¤¤\n");
+    printf("¤¤¤¤¤¤¤¤¤¤¤¤  Client-Serveur Tubes nommée ¤¤¤¤¤¤¤¤¤¤¤¤\n");
     printf("\n");
     printf("¤ Coté Serveur (pid= %d) \n",getpid());
     while(1){
@@ -60,10 +59,10 @@ int main(){
             continue ;
         }
         //Affichage
-        printf("¤¤¤¤¤¤¤¤¤ Message Recue ¤¤¤¤¤¤¤¤¤\n");
+        printf("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤ Message Recue ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤\n");
         printf("         PID= %d \n",question.pid_client );
         printf("         Nombre= %d \n",question.question);
-        printf("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤\n");
+        printf("¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤\n");
         printf("\n");
 
         // Ouvrir le fichier "result"
