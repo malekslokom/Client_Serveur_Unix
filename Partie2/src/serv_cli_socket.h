@@ -19,7 +19,7 @@
 #include <unistd.h>
 
 //Nombre max peut étre tiré au hasard par le client
-#define NMAX 20
+#define NMAX 10
 
 //Numéro de PORT qui sera utilisé pour nommer la prise
 #define PORT 9000

@@ -10,7 +10,7 @@
 #include<sys/stat.h>
 #include<string.h>
 
-#define NMAX 20
+#define NMAX 10
 #define QuestionTube "fifo12"
 #define ResponseTube "fifo22"
 
