@@ -1,5 +1,6 @@
 #ifndef SERV_CLI_SOCKET
 #define SERV_CLI_SOCKET
+#include<string.h>
 
 //ajout des headers 
 #include <stdlib.h>

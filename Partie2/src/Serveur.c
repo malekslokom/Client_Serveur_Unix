@@ -1,6 +1,4 @@
 #include "serv_cli_socket.h"
-#include<string.h>
-
 int main()
 {
     struct sockaddr_in newAddr;
@@ -86,7 +84,9 @@ int main()
             char pid_client_str[10];
             sprintf(pid_client_str, "%d", question.pid_client);
             char resultPath[100]="";
-            strcat(resultPath,"Partie2/results/");
+       
+           
+            strcat(resultPath,"results/");
             strcat(resultPath,pid_client_str);
             strcat(resultPath,".txt");
 

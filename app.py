@@ -12,19 +12,33 @@
 # root.mainloop()
 
 import threading
+from time import sleep
 from tkinter import Label, Toplevel
 from tkinter.ttk import Style
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 from subprocess import call
 import os
-# def exe1(): 
-#     os.system( '"Users\\malekslokom\\Desktop\\Malek_Slokom_2ING1_Projet_Unix\\Partie2\\obj\\Serveur"' )
-# def exe2(): 
-#     os.system('"Users\\malekslokom\\Desktop\\Malek_Slokom_2ING1_Projet_Unix\\Partie2\\obj\\ClientÅ"')
+import subprocess
 
+source=""
+def runServeur(): 
+    
+    subprocess.Popen(["./obj/Serveur",""])
+    
+
+    # call(["./Partie2/obj/Serveur"])
+   
+def runClient(): 
+    # a=call(["./Partie2/obj/Client"])
+    # print(a)
+    global source
+    pidClient=subprocess.Popen(["./obj/Client",""]).pid
+    print(pidClient)
+    source="results/"+str(pidClient)+".txt"
+    
 def DataEntryForm():
-
+    os.chdir("Partie2")
    # Toplevel object which will
     # be treated as a new window
     newWindow = Toplevel(app)
@@ -46,14 +60,21 @@ def DataEntryForm():
     # A Label widget to show in toplevel
     Label(newWindow,
           text ="This is a new window").pack()
-    # t1 = threading.Thread(target=exe1, args=()) 
-    # t2 = threading.Thread(target=exe2, args=()) 
 
-    # # starting thread 1 
-    # t1.start() 
-    # # starting thread 2 
-    # t2.start() 
-    call(["./clientServeur"])
+    hreadServeur = threading.Thread(target=runServeur, args=()) 
+    hreadClient = threading.Thread(target=runClient, args=()) 
+
+    # starting thread 1 
+    hreadServeur.start() 
+    # starting thread 2 
+    hreadClient.start() 
+    sleep(0.1)
+    print(source)
+    f = open(source, "r")
+    Label(newWindow,
+          text =f.read()).pack()
+    
+
 
 
 class DataEntry(ttk.Frame):
