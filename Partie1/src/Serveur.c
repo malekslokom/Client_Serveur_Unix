@@ -47,7 +47,7 @@ int main(){
     signal(SIGUSR1,hand_reveil);
    
     // Affichage
-    printf("¤¤¤¤¤¤¤¤¤¤¤¤  Client-Serveur Tubes nommée ¤¤¤¤¤¤¤¤¤¤¤¤\n");
+    printf("¤¤¤¤¤¤¤¤¤¤¤¤  Client-Serveur Tubes nommés ¤¤¤¤¤¤¤¤¤¤¤¤\n");
     printf("\n");
     printf("¤ Coté Serveur (pid= %d) \n",getpid());
     while(1){

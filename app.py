@@ -136,7 +136,7 @@ def TubeResult():
   
     # sets the title of the
     # Toplevel widget
-    newWindow.title("Tubes nommées")
+    newWindow.title("Tubes nommés")
     newWindow.update_idletasks()
     w_height = newWindow.winfo_height()
     w_width = newWindow.winfo_width()

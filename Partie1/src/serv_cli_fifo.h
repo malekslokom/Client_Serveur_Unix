@@ -11,8 +11,8 @@
 #include<string.h>
 
 #define NMAX 10
-#define QuestionTube "fifo12"
-#define ResponseTube "fifo22"
+#define QuestionTube "fifo1"
+#define ResponseTube "fifo2"
 
 struct question {
     int pid_client ;

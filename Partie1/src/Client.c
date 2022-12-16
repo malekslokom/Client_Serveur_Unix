@@ -26,7 +26,7 @@ int main()
     question.question = 1+rand()% NMAX;
 
     // Affichage
-    printf("¤¤¤¤¤¤¤¤¤¤¤¤  Client-Serveur Tubes nommée ¤¤¤¤¤¤¤¤¤¤¤¤\n");
+    printf("¤¤¤¤¤¤¤¤¤¤¤¤  Client-Serveur Tubes nommés ¤¤¤¤¤¤¤¤¤¤¤¤\n");
     printf("\n");
     printf("¤ Coté Client (pid= %d) \n",getpid());
     printf("¤¤¤¤¤¤¤¤¤ Message ¤¤¤¤¤¤¤¤¤\n");
